@@ -2,7 +2,7 @@ if (( ! ${+MNML_ERR_COLOR} )) typeset -g MNML_ERR_COLOR=red
 typeset -gi MNML_LAST_ERR
 
 _prompt_mnml_precmd() {
-  MNML_LAST_ERR=${?}
+  MNML_LAST_ERR=$?
 }
 
 _prompt_mnml_buffer-empty() {
@@ -20,7 +20,7 @@ _prompt_mnml_buffer-empty() {
     if (( ${#dirstack} )) print -P %F{244}${${(D)dirstack}//\//%f\/%F{244}}%f
     ls --group-directories-first --color=always -vF
     command git status -sb 2>/dev/null
-    print -Pn ${PS1}
+    print -Pn "${PS1}"
     zle redisplay
   else
     zle accept-line
