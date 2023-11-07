@@ -6,18 +6,23 @@ _prompt_mnml_precmd() {
 }
 
 _prompt_mnml_buffer-empty() {
+  local v_files h_files dentries i
+
   if [[ -z ${BUFFER} && ${CONTEXT} == start ]]; then
-    # draw infoline
     if (( MNML_LAST_ERR )) print -Pn '%F{${MNML_ERR_COLOR}}${MNML_LAST_ERR} '
-    print -Pn '%(1j.%F{244}%j%f& .)%F{244}%n%f@%F{244}%m%f:'
-    print -Pn %F{244}${${(%):-%~}//\//%f\/%F{244}}
+    print -Pn '%(1j.%F{8}%j%f& .)%F{8}%n%f@%F{8}%m%f:%F{8}%~%f'
     local -a v_files=(*(N^D))
     local -a h_files=(.*(N^D))
-    print -Pn " %f[%F{244}${#v_files}%f"
-    if (( #h_files )) print -Pn " (%F{244}${#h_files}%f)"
+    print -Pn ' [%F{8}${#v_files}%f'
+    if (( #h_files )) print -Pn ' (%F{8}${#h_files}%f)'
     print ]
-    # display magic enter
-    if (( ${#dirstack} )) print -P %F{244}${${(D)dirstack}//\//%f\/%F{244}}%f
+
+    dentries=${#dirstack}
+    for (( i = 1; i < $dentries; i++ )); do
+      print -n "($i) \e[90m${(D)dirstack[$i]}$reset_color "
+    done
+    if [[ $i -eq $dentries ]] print "($i) \e[90m${(D)dirstack[$i]}$reset_color"
+
     ls --group-directories-first --color=always -vF
     command git status -sb 2>/dev/null
     print -Pn "${PS1}"
