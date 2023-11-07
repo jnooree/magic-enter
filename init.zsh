@@ -6,13 +6,12 @@ _prompt_mnml_precmd() {
 }
 
 _prompt_mnml_buffer-empty() {
-  local v_files h_files dentries i
+  local dentries i
 
   if [[ -z ${BUFFER} && ${CONTEXT} == start ]]; then
     if (( MNML_LAST_ERR )) print -Pn '%F{${MNML_ERR_COLOR}}${MNML_LAST_ERR} '
     print -Pn '%(1j.%F{8}%j%f& .)%F{8}%n%f@%F{8}%m%f:%F{8}%~%f'
-    local -a v_files=(*(N^D))
-    local -a h_files=(.*(N^D))
+    local v_files=(*(N^D)) h_files=(.*(N^D))
     print -Pn ' [%F{8}${#v_files}%f'
     if (( #h_files )) print -Pn ' (%F{8}${#h_files}%f)'
     print ]
