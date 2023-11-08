@@ -18,9 +18,11 @@ _prompt_mnml_buffer-empty() {
 
     dentries=${#dirstack}
     for (( i = 1; i < $dentries; i++ )); do
-      print -n "($i) \e[90m${(D)dirstack[$i]}$reset_color "
+      print -n "($i) \e[90m${(Dq)dirstack[$i]}$reset_color "
     done
-    if [[ $i -eq $dentries ]] print "($i) \e[90m${(D)dirstack[$i]}$reset_color"
+    if [[ $i -eq $dentries ]]; then
+      print "($i) \e[90m${(Dq)dirstack[$i]}$reset_color"
+    fi
 
     ls --group-directories-first --color=always -vF
     command git status -sb 2>/dev/null
