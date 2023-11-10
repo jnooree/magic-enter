@@ -1,6 +1,8 @@
 if (( ! ${+MNML_ERR_COLOR} )) typeset -g MNML_ERR_COLOR=red
 typeset -gi MNML_LAST_ERR
 
+autoload -Uz colors && colors
+
 _prompt_mnml_precmd() {
   MNML_LAST_ERR=$?
 }
@@ -27,7 +29,7 @@ _prompt_mnml_buffer-empty() {
     ls --group-directories-first --color=always -vF
     command git status -sb 2>/dev/null
     print -Pn "${PS1}"
-    zle redisplay
+    zle reset-prompt
   else
     zle accept-line
   fi
