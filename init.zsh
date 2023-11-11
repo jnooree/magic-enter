@@ -7,6 +7,10 @@ _prompt_mnml_precmd() {
   MNML_LAST_ERR=$?
 }
 
+_prompt_mnml_sync_exit() {
+  return "$MNML_LAST_ERR"
+}
+
 _prompt_mnml_buffer-empty() {
   local dentries i
 
@@ -28,6 +32,8 @@ _prompt_mnml_buffer-empty() {
 
     ls --group-directories-first --color=always -vF
     command git status -sb 2>/dev/null
+
+    _prompt_mnml_sync_exit
     print -Pn "${PS1}"
     zle reset-prompt
   else
