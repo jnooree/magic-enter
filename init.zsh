@@ -30,7 +30,7 @@ _prompt_mnml_buffer-empty() {
       print "($i) \e[90m${(Dq)dirstack[$i]}$reset_color"
     fi
 
-    ls --group-directories-first --color=always -vF
+    ls -F --color=always
     command git status -sb 2>/dev/null
 
     _prompt_mnml_sync_exit
