@@ -15,4 +15,32 @@ What does it show?
   * `ls -AF` output.
   * Concise `git status` only when inside a git repo.
 
+Settings
+--------
+
+The following environment variable is used to color the last command exit status
+in the info line:
+
+| Variable       | Description        | Default value |
+| -------------- | ------------------ | ------------- |
+| MNML_ERR_COLOR | Color for failures | `red`         |
+
+The commands to be executed in Zsh when magic enter is shown can be customized
+using:
+
+    zstyle ':zim:magic-enter' commands '<command>'...
+
+This is how the default configuration looks like:
+
+    zstyle ':zim:magic-enter' commands \
+        'if (( ${#dirstack} )) print -P %F{244}${${(Dq+)dirstack}//\//%f\/%F{244}}%f' \
+        'ls -AF' \
+        'git --no-pager status -sb --untracked-files=no 2>/dev/null'
+
+And here's an example of a customized configuration:
+
+    zstyle ':zim:magic-enter' commands \
+        'ls -F' \
+        'jj st --no-pager 2>/dev/null || git --no-pager status -sb 2>/dev/null'
+
 [subnixr's minimal]: https://github.com/subnixr/minimal
