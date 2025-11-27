@@ -12,7 +12,7 @@ _prompt_mnml_sync_exit() {
 }
 
 _prompt_mnml_buffer-empty() {
-  local dentries i
+  builtin emulate -L zsh
 
   if [[ -z ${BUFFER} && ${CONTEXT} == start ]]; then
     if (( MNML_LAST_ERR )) print -Pn '%F{${MNML_ERR_COLOR}}${MNML_LAST_ERR} '
@@ -22,16 +22,14 @@ _prompt_mnml_buffer-empty() {
     if (( #h_files )) print -Pn ' (%F{8}${#h_files}%f)'
     print ]
 
-    dentries=${#dirstack}
-    for (( i = 1; i < $dentries; i++ )); do
-      print -n "($i) \e[90m${(Dq)dirstack[$i]}$reset_color "
-    done
-    if [[ $i -eq $dentries ]]; then
-      print "($i) \e[90m${(Dq)dirstack[$i]}$reset_color"
-    fi
-
-    ls
-    command git status -sb 2>/dev/null
+    local -a zcommands
+    zstyle -a ':zim:magic-enter' commands 'zcommands' || zcommands=( \
+        'if (( ${#dirstack} )) print -P %F{244}${${(Dq+)dirstack}//\//%f\/%F{244}}%f' \
+        'ls -AF' \
+        'git --no-pager status -sb --untracked-files=no 2>/dev/null' \
+    )
+    local zcommand
+    for zcommand (${zcommands}) eval ${zcommand}
 
     _prompt_mnml_sync_exit
     print -Pn "${PS1}"
